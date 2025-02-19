@@ -15,7 +15,7 @@ Pentru mentananta, este mai bine ca un program cu multe linii de cod sa fie spar
 ## Stiva si coada 
 [Cuprins](#cuprins)
 
-[fisierul sursa](proiect_vector_stiva_coada.cpp)
+[fisierul sursa](proiect_vector_stiva_si_coada.cpp)
 
 
 ## Formular test la biologie in terminal
