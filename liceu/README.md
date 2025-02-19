@@ -3,7 +3,7 @@
 ## Cuprins
 
 1. [Stiva si Coada implementate cu array](#stiva-si-coada)
-1. [Grafuri neorientate]
+1. [Grafuri neorientate](#Grafuri-neorientate)
 
 In acest director se regasesc principalele proiectele facute in liceu la materia informatica. Acestea sunt realizate in limbajul c/c++.
 
@@ -18,13 +18,13 @@ Pentru mentananta, este mai bine ca un program cu multe linii de cod sa fie spar
 [fisierul sursa](proiect_vector_stiva_si_coada.cpp)
 
 
-## Proiect grafuri neorientate
+## Grafuri neorientate
 [Cuprins](#cuprins)
 
 [fisierul sursa](proiect_grafuri_neorientate.cpp)
 
 
-## Proiect grafuri orientate
+## Grafuri orientate
 [Cuprins](#cuprins)
 
 [fisierul sursa](proiect_grafuri_orientate.cpp)
