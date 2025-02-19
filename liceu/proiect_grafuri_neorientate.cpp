@@ -12,6 +12,16 @@ using namespace std;
 /*===================================================================*/
 void afisare_nume();
 int citeste_optiune_meniu(int max_optiuni);
+
+int rasturnat_numar(int numar);
+int verifica_duplicat(int v[], int n, int numar);
+
+int verifica_matr_adiacenta(int a[][10], int n);
+int matrice_patratica(int m, int n);
+
+int parcurgere_pe_latime(int a[][10], int n, int varf);
+int parcurgere_pe_latime_si_conexitate(int a[][10], int n, int varf);
+void parcurgere_pe_adancime(int a[][10], int n, int varf);
 /*===================================================================*/
 void meniu_principal();
 
@@ -28,49 +38,67 @@ void m_gr_vf_1_def();
 void m_gr_vf_2_vf_izolat();
 void vf_izolat_1_def();
 void vf_izolat_2_aplicatie();
+void verificare_vf_izolat();
 
 void m_gr_vf_3_vf_terminal();
 void vf_terminal_1_def();
 void vf_terminal_2_aplicatie();
+void verificare_vf_terminal();
 
 
 /*===================================================================*/
 void mp_3_met_reprezentare();
 void metode_repr_1_ls_adiacenta();
+void ls_adiacenta_aplicatie();
+
 void metode_repr_2_vect_muchii();
+void vect_muchii_aplicatie();
 
 void metode_repr_3_matr_adiacenta();
 void matr_adiacenta_1_def();
 void matr_adiacenta_2_aplicatie();
+void prg_matr_adiacenta();
 
 
 /*===================================================================*/
-void mp_4_parcurgere() ;
-void parcurgere_1_latime();
-void parcurgere_2_inaltime();
+void mp_4_parcurgere();
 
+void parcurgere_1_latime();
+void program_latime();
+
+void parcurgere_2_adancime();
+void program_adancime();
 
 /*===================================================================*/
 void mp_5_conexitate();
 void conexitate_1_def();
 void conexitate_2_verif_graf_conex();
+void graf_conex_program();
 
 /*===================================================================*/
 void mp_6_graf_hamiltonian();
 void hamitonian_1_teorie();
 void hamiltonian_2_verificare();
+void program_hamiltonian();
 
 
 /*===================================================================*/
 void mp_7_graf_eulerian();
 void eulerian_1_teorie();
 void eulerian_2_verificare();
+void program_eulerian();
 
 /*===================================================================*/
 void mp_8_aplicatii();
+
 void apl_1();
+void program_1();
+
 void apl_2();
+void program_2();
+
 void apl_3();
+void program_3();
 
 /*===================================================================*/
 void mp_9_test();
@@ -205,6 +233,248 @@ int citeste_optiune_meniu(int max_optiuni) {
 
     return r;
 }
+
+/*===================================================================
+   Functii ajutatoare pt probleme si aplicatii
+=====================================================================*/
+
+/*===========================*/
+int verifica_matr_adiacenta(int a[][10], int n) {
+    int i, j, ok_diag = 1, ok_el = 1;
+
+    for(i = 1; i <= n; i++) {
+        if(a[i][i] != 0) {
+            ok_diag = 0;
+            cout << "Diagonala principala nu are toate elementele 0: a[" << i << "][" << j << "]" << endl;
+        }
+    }
+
+    if( ok_diag == 1 ) {
+        for(i = 1; i <= n && ok_el == 1; i++) {
+            for(j = 1; j <= n; j++) {
+                if(a[i][j] != 0 && a[i][j] != 1) {
+                    cout << "Element diferit de 1 sau 0: a[" << i << "][" << j << "] = " << a[i][j] << endl;
+                    ok_el = 0;
+                }
+                if(a[i][j] != a[j][i]) {
+                    cout << "Matrice nesimetrica: i = " << i << ", j = " << j << ", " << a[i][j] << " != " << a[j][i]<< endl;
+                    ok_el = 0;
+                }
+            }
+        }
+
+        if( ok_el == 1 ) {
+            return 1;
+        }
+        else
+            return 0;
+    } else
+        return 0;
+}
+/*===========================*/
+int parcurgere_pe_latime(int a[][10], int n, int varf) {
+    int viz[10]; // tin evidenta varfurilor vizitate
+    int i, j;
+    int ultim = 1;
+    int coada[30]; // vom tine aici varfurile parcurse
+    int k; // contor coada
+    int p; // pointer verificare coada
+
+    //initializare viz
+    //fiecare element corespunde nodului cu acelasi index.
+    //val = 0 daca nodul a fost vizitat si 0 daca nu a fost vizitat
+    //incepem de la 0 - nici un elemant vizitat
+    viz[0] = 9;
+    for(i = 1; i <= n; i++) {
+        viz[i] = 0; // nodul nu este vizitat
+    }
+
+    //Varf start
+    k = 1;
+
+    viz[varf] = 1;
+    coada[k] = varf;
+    p = 1; // pozitie curenta coada,
+           //unde avem varful pentru care verificam adiacentele
+
+    //de gasit conditie iesire din while
+    while( p <= ultim ) {
+
+        for(j = 1; j <= n; j++) {
+            if( a[varf][j] == 1 && viz[j] == 0 ) {
+                k = k + 1;
+                coada[k] = j; // id-ul nodului
+                viz[j] = 1;   // am vizitat nodul
+
+                ultim++;  // mai am cel putin un varf de verificat
+            }
+        }
+        p++;
+        varf = coada[p];
+    }
+
+    cout << "Parcurgere in latime de la nodul: " << coada[1] << endl;
+    //cout << "Index ultim element din coada: " << ultim << endl;
+    for( i = 1; i <= ultim; i++ ) {
+        cout << coada[i] << " ";
+    }
+    cout << endl;
+/*
+    if( n != ultim ) {
+        cout << "GRAF-ul NU este conex!" << endl;
+    } else {
+        cout << "GRAF-ul este conex" << endl;
+    }
+*/
+
+}
+
+/*===========================*/
+int parcurgere_pe_latime_si_conexitate(int a[][10], int n, int varf) {
+    int viz[10]; // tin evidenta varfurilor vizitate
+    int i, j;
+    int ultim = 1;
+    int coada[30]; // vom tine aici varfurile parcurse
+    int k; // contor coada
+    int p; // pointer verificare coada
+
+    //initializare viz
+    //fiecare element corespunde nodului cu acelasi index.
+    //val = 0 daca nodul a fost vizitat si 0 daca nu a fost vizitat
+    //incepem de la 0 - nici un elemant vizitat
+    viz[0] = 9;
+    for(i = 1; i <= n; i++) {
+        viz[i] = 0; // nodul nu este vizitat
+    }
+
+    //Varf start
+    k = 1;
+
+    viz[varf] = 1;
+    coada[k] = varf;
+    p = 1; // pozitie curenta coada,
+           //unde avem varful pentru care verificam adiacentele
+
+    //de gasit conditie iesire din while
+    while( p <= ultim ) {
+
+        for(j = 1; j <= n; j++) {
+            if( a[varf][j] == 1 && viz[j] == 0 ) {
+                k = k + 1;
+                coada[k] = j; // id-ul nodului
+                viz[j] = 1;   // am vizitat nodul
+
+                ultim++;  // mai am cel putin un varf de verificat
+            }
+        }
+        p++;
+        varf = coada[p];
+    }
+/*
+    cout << "Parcurgere in latime de la nodul: " << coada[1] << endl;
+    //cout << "Index ultim element din coada: " << ultim << endl;
+    for( i = 1; i <= ultim; i++ ) {
+        cout << coada[i] << " ";
+    }
+    cout << endl;
+*/
+
+    return ultim;
+/*
+    if( n != ultim ) {
+        cout << "GRAF-ul NU este conex!" << endl;
+    } else {
+        cout << "GRAF-ul este conex" << endl;
+    }
+*/
+
+}
+
+/*===========================*/
+void parcurgere_pe_adancime(int a[][10], int n, int varf) {
+    int viz[10]; // tin evidenta varfurilor vizitate
+    int i, j;
+
+    int stiva[20];
+    int gasit;
+
+    int coada[30]; // vom tine aici varfurile parcurse
+    int k; // contor coada
+    int p; // pointer verificare coada
+
+    //initializare viz
+    //fiecare element corespunde nodului cu acelasi index.
+    //val = 0 daca nodul a fost vizitat si 0 daca nu a fost vizitat
+    //incepem de la 0 - nici un elemant vizitat
+    viz[0] = 9;
+    for(i = 1; i <= n; i++) {
+        viz[i] = 0; // nodul nu este vizitat
+    }
+
+    //Varf start coada
+    k = 1;
+
+    viz[varf] = 1;
+    coada[k] = varf;
+    p = 1; // pozitie curenta stiva,
+    stiva[p] = varf;
+    //de gasit conditie iesire din while
+    while( p > 0 ) {
+        gasit = 0;
+        for(j = 1; j <= n && gasit == 0; j++) {
+            if( a[varf][j] == 1 && viz[j] == 0 ) {
+                gasit = 1;
+                varf = j;
+            }
+        }
+
+        if( gasit == 1 ) {
+            k = k + 1;
+            coada[k] = varf; //salvare pt afisare
+            viz[varf] = 1;   //marchez vizitate
+            p++;
+            stiva[p] = varf;
+        } else {
+            p--; //
+        }
+    }
+
+    cout << "Parcurgere pe adancime de la nodul: " << coada[1] << endl;
+    for( i = 1; i <= k; i++ ) {
+        cout << coada[i] << " ";
+    }
+    cout << endl;
+}
+
+/*============================*/
+int matrice_patratica(int m, int n) {
+    if(m == n) {
+        return 1;
+    } else return 0;
+}
+
+/*===========================*/
+int rasturnat_numar(int numar) {
+    int invers = 0;
+
+    while(numar > 0) {
+        invers = invers * 10 + numar%10;
+        numar = numar / 10;
+    }
+    return invers;
+}
+
+/*===========================*/
+int verifica_duplicat(int v[], int n, int numar) {
+    int duplicat = 0;
+    for(int i = 0; i < n && duplicat == 0;  i++) {
+        if(v[i] == numar || v[i] == rasturnat_numar(numar)) {
+            duplicat = 1;
+        }
+    }
+    return duplicat;
+}
+
 /*============================================================
     MENIU PRINCIPAL
 *=============================================================*/
@@ -467,10 +737,56 @@ void vf_izolat_2_aplicatie() {
 
 
     cout << "Varf izolat - aplicatie" << endl;
+    cout << " program:\n\
+    for(i = 1; i <= n; i++) {\n\
+        grad_vf = 0;\n\
+        for(j = 1; j <= n; j++) {\n\
+            grad_vf = grad_vf + a[i][j];\n\
+        }\n\
+        if(grad_vf == 0) {\n\
+            nr_vf_izolate++;\n\
+            cout << 'varf izolat: ' << i << endl;\n\
+        }\n\
+    }\n\
+    if(nr_vf_izolate == 0) cout << 'graful nu contine varfuri izolate'" << endl;
+    cout << endl << "executie program: " << endl;
+
+    verificare_vf_izolat();
 
     getch();
     getline(cin, buffer);
 }
+
+/*===============================================
+Program pt vf_izolat
+=================================================*/
+void verificare_vf_izolat() {
+    int a[10][10];
+    int v[45], i, j, n, k = 0, nr_vf_izolate = 0, grad_vf;
+    cout << "nr varfuri: "; cin >> n;
+    cout << "introduceti matricea de adiacenta a grafului: " << endl;
+    for(i = 1; i <= n; i++) {
+        for(j = 1; j <= n; j++) {
+            cin >> a[i][j];
+        }
+        cout << endl;
+    }
+
+    if(verifica_matr_adiacenta(a, n) == 1) {
+        for(i = 1; i <= n; i++) {
+            grad_vf = 0;
+            for(j = 1; j <= n; j++) {
+                grad_vf = grad_vf + a[i][j];
+            }
+            if(grad_vf == 0) {
+                nr_vf_izolate++;
+                cout << "varf izolat: " << i << endl;
+            }
+        }
+        if(nr_vf_izolate == 0) cout << "graful nu contine varfuri izolate";
+    } else cout << "matricea nu poate fi matrice de adiacenta";
+}
+
 /*===================================================================*/
 //meniu grad vf - opt 2 - varf izolat - care deschide un alt meniu
 void m_gr_vf_3_vf_terminal() {
@@ -538,9 +854,56 @@ void vf_terminal_2_aplicatie() {
 
     cout << "Varf terminal - aplicatie" << endl;
 
+    cout << " program:\n\
+    for(i = 1; i <= n; i++) {\n\
+        grad_vf = 0;\n\
+        for(j = 1; j <= n; j++) {\n\
+            grad_vf = grad_vf + a[i][j];\n\
+        }\n\
+        if(grad_vf == 1) {\n\
+            nr_vf_terminale++;\n\
+            cout << 'varf terminal: ' << i << endl;\n\
+        }\n\
+    }\n\
+    if(nr_vf_izolate == 0) cout << 'graful nu contine varfuri terminale'" << endl;
+    cout << endl << "executie program: " << endl;
+
+    verificare_vf_terminal();
+
     getch();
     getline(cin, buffer);
 }
+
+/*===============================================
+Program pt vf_terminal
+=================================================*/
+void verificare_vf_terminal() {
+    int a[10][10];
+    int v[45], i, j, n, k = 0, nr_vf_terminale = 0, grad_vf;
+    cout << "nr varfuri: "; cin >> n;
+    cout << "introduceti matricea de adiacenta a grafului: " << endl;
+    for(i = 1; i <= n; i++) {
+        for(j = 1; j <= n; j++) {
+            cin >> a[i][j];
+        }
+        cout << endl;
+    }
+
+    if(verifica_matr_adiacenta(a, n) == 1) {
+        for(i = 1; i <= n; i++) {
+            grad_vf = 0;
+            for(j = 1; j <= n; j++) {
+                grad_vf = grad_vf + a[i][j];
+            }
+            if(grad_vf == 1) {
+                nr_vf_terminale++;
+                cout << "varf terminal: " << i << endl;
+            }
+        }
+        if(nr_vf_terminale == 0) cout << "graful nu contine varfuri terminale";
+    } else cout << "matricea nu poate fi matrice de adiacenta";
+}
+
 /*======================================================================
  opt 3 - meniu PRINCIPAL - metode reprezentare
 =====================================================================*/
@@ -603,11 +966,63 @@ void metode_repr_1_ls_adiacenta() {
     cout << "Lista adiacenta - definitie + program + executie" << endl;
     cout <<"\n\n\
     Lista de adiacenta va contine doua coloane, una cu varfurile grafului, iar cealalta\n\
-    cu varfurile adiacente fiecarui varf din graf.";
+    cu varfurile adiacente fiecarui varf din graf." << endl << endl;
+
+    cout << " program:\n\
+    for(i = 1; i <= n; i++) {\n\
+        cout << i << ': ';\n\
+        for(j = 0; j <= n; j++) {\n\
+            if(matr[i][j] == 1) cout << j << " ";\n\
+        }\n\
+        cout << endl;\n\
+    }";
+
+    cout << endl << endl << "executie program: " << endl;
+    ls_adiacenta_aplicatie();
 
 
     getch();
     getline(cin, buffer);
+}
+
+/*===============================================
+    Program afisare lista adiacenta
+=================================================*/
+void ls_adiacenta_aplicatie() {
+    int n, m, i, j, vf1, vf2, matr[100][100];
+
+    cout << "numar varfuri: "; cin >> n;
+    do{
+        cout << "numar muchii: ";
+        cin >> m;
+    } while (m > n*(n-1)/2);
+
+    for(i = 1; i <= n; i ++) {
+        for(j = 1; j <= n; j++) {
+            matr[i][j] = 0;
+        }
+    }
+    for(i = 0; i < m; i++) {
+        cout << "muchie: " << endl;
+        do{
+            cout << "vf1: "; cin >> vf1;
+            cout << "vf2: "; cin >> vf2;
+            if(vf1 > n || vf2 > n || vf1 == vf2 || vf1 > vf2) cout << "nu pot fi varfuri; dati alte valoari: " << endl;
+        } while(vf1 > n || vf2 > n || vf1 == vf2 || vf1 > vf2);
+
+        matr[vf1][vf2] = 1;
+        matr[vf2][vf1] = 1;
+        cout << endl;
+    }
+
+    cout << endl << endl << "lista de adiacenta: " << endl;
+    for(i = 1; i <= n; i++) {
+        cout << i << ": ";
+        for(j = 0; j <= n; j++) {
+            if(matr[i][j] == 1) cout << j << " ";
+        }
+        cout << endl;
+    }
 }
 
 /*===================================================================*/
@@ -623,11 +1038,62 @@ void metode_repr_2_vect_muchii() {
     cout <<"\n\n\
     Vectorul muchiilor va contine muchiile grafului, care au ca si parametrii doua varfuri.";
 
+    cout << endl << endl << "program:\n\
+    struct muchii_graf {\n\
+        int vf1, vf2;\n\
+    };\n\
+    muchii_graf muchii[100];\n\
+    for(i = 0; i < m; i++) {\n\
+        cout << 'muchie: ' << endl;\n\
+        cin >> muchii[i].vf1;\n\
+        cin >> muchii[i].vf2;\n\
+    }\n\
+    cout << 'vectorul muchiilor: ' << endl;\n\
+    for(i = 0; i < m; i++) {\n\
+        cout <<'(' << muchii[i].vf1 << ', ' << muchii[i].vf2 << ')' << '  ';\n\
+    }";
+
+    cout << endl << endl << "executie program: " << endl;
+    vect_muchii_aplicatie();
+
     getch();
     getline(cin, buffer);
 }
+
+/*===============================================
+    Program afisare vectorul muchiilor
+=================================================*/
+void vect_muchii_aplicatie() {
+    struct muchii_graf {
+        int vf1, vf2;
+    };
+    muchii_graf muchii[100];
+
+    int n, m, i;
+
+    cout << "nuamr varfuri: "; cin >> n;
+
+    do{
+        cout << "numar muchii: ";
+        cin >> m;
+    } while (m > n*(n-1)/2);
+
+    for(i = 0; i < m; i++) {
+        cout << "muchie: " << endl;
+        do{
+            cout << "vf1: "; cin >> muchii[i].vf1;
+            cout << "vf2: "; cin >> muchii[i].vf2;
+            if(muchii[i].vf1 > n || muchii[i].vf2 > n || muchii[i].vf1 == muchii[i].vf2 || muchii[i].vf1 > muchii[i].vf2) cout << "nu pot fi varfuri; dati alte valoari: " << endl;
+        } while(muchii[i].vf1 > n || muchii[i].vf2 > n || muchii[i].vf1 == muchii[i].vf2 || muchii[i].vf1 > muchii[i].vf2);
+    }
+
+    cout << "vectorul muchiilor: " << endl;
+    for(i = 0; i < m; i++) {
+        cout <<"(" << muchii[i].vf1 << ", " << muchii[i].vf2 << ")" << "  ";
+    }
+}
 /*===================================================================*/
-// opt 1 meniu met reprezentare - matrice de adiacenta - care deschide alt meniu
+// opt 3 meniu met reprezentare - matrice de adiacenta - care deschide alt meniu
 void metode_repr_3_matr_adiacenta() {
     int o;
 
@@ -698,9 +1164,81 @@ void matr_adiacenta_2_aplicatie() {
 
     cout << "Matrice adiacenta - aplicatie" << endl;
 
+    cout << endl << "\
+    program: \n\
+    int matrice_patratica(int m, int n) {\n\
+        if(m == n) {\n\
+            return 1;\n\
+        } else return 0;\n\
+    }\n\
+    int verifica_matr_adiacenta(int a[][10], int n) {\n\
+        int i, j, ok_diag = 0, ok_el;\n\
+        for(i = 1; i <= n; i++) {\n\
+            for(j = 1; j <= n; j++){\n\
+                if(i == j && a[i][j] == 0) {\n\
+                    ok_diag = 1;\n\
+                } else ok_diag = 0;\n\
+            }\n\
+        }\n\
+        if(ok_diag == 1) {\n\
+            for(i = 1; i <= n; i++) {\n\
+                for(j = 1; j <= n; j++) {\n\
+                    if(a[i][j] == a[j][i]) {\n\
+                        ok_el = 1;\n\
+                    } else ok_el = 0;\n\
+                }\n\
+            }\n\
+            if(ok_el == 1) return 1;\n\
+            else return 0;\n\
+        } else return 0;\n\
+    }\n\
+    int main() {\n\
+        int n, m, a[10][10], i, j, ok_diag = 0, ok_el;\n\
+        cout << 'n: '; cin >> n;\n\
+        cout << 'm: '; cin >> m;\n\
+        if(matrice_patratica(m, n) == 1) {\n\
+            cout << 'citire matrice: ' << endl;\n\
+            for(i = 1; i <= n; i++) {\n\
+                for(j = 1; j <= n; j++) {\n\
+                    cin >> a[i][j];\n\
+                }\n\
+                cout << endl;\n\
+            }\n\
+            if(verifica_matr_adiacenta(a, n) == 1) cout << 'este matrice de adiacenta';\n\
+            else cout << 'nu este matrice de adiacenta';\n\
+        } else cout << 'nu este matrice de adiacenta';\n\
+        return 0;\n\
+    }";
+    cout << endl << endl << "executie: " << endl;
+
+    prg_matr_adiacenta();
+
     getch();
     getline(cin, buffer);
 }
+
+/*===============================================
+Program pt verificare matrice adiacenta
+=================================================*/
+void prg_matr_adiacenta() {
+    int n, m, a[10][10], i, j, ok_diag = 0, ok_el;
+    cout << "n: "; cin >> n;
+    cout << "m: "; cin >> m;
+
+    if(matrice_patratica(m, n) == 1) {
+        cout << "citire matrice: " << endl;
+        for(i = 1; i <= n; i++) {
+            for(j = 1; j <= n; j++) {
+                cin >> a[i][j];
+            }
+            cout << endl;
+        }
+        if(verifica_matr_adiacenta(a, n) == 1) cout << "este matrice de adiacenta";
+        else cout << "nu este matrice de adiacenta";
+    } else cout << "nu este matrice de adiacenta";
+}
+
+
 /*=====================================================================
   opt 4 - meniu PRINCIPAL - parcurgere
 ======================================================================*/
@@ -720,7 +1258,7 @@ void mp_4_parcurgere() {
 
         cout << "      1. In latime" << endl << endl;
 
-        cout << "      2. In inaltime" << endl << endl;
+        cout << "      2. In adancime" << endl << endl;
 
         cout << "      3. Revenire" << endl << endl;
 
@@ -737,7 +1275,7 @@ void mp_4_parcurgere() {
             break;
 
         case 2:
-            parcurgere_2_inaltime();
+            parcurgere_2_adancime();
             break;
 
         case 3:
@@ -749,7 +1287,7 @@ void mp_4_parcurgere() {
     } while(o != 3);
 }
 
-/*===========================*/
+/*===============================================*/
 void parcurgere_1_latime() {
     string buffer;
     getline(cin, buffer); // curatare buffer de intrare - tasttura. Avem ceva acolo pt ca suntem bucla meniului principal
@@ -757,25 +1295,136 @@ void parcurgere_1_latime() {
     system("cls");
 
 
-    cout << "In latime - program + executie" << endl;
+    cout << "In latime" << endl;
+
+    cout << "program:\n\
+    for(i = 1; i <= n; i++) {\n\
+        viz[i] = 0;\n\
+    }\n\
+    k = 1;\n\
+    viz[varf] = 1;\n\
+    coada[k] = varf;\n\
+    p = 1;\n\
+    while( p <= ultim ) {\n\
+        for(j = 1; j <= n; j++) {\n\
+            if( a[varf][j] == 1 && viz[j] == 0 ) {\n\
+                k = k + 1;\n\
+                coada[k] = j;\n\
+                viz[j] = 1;\n\
+                ultim++;\n\
+            }\n\
+        }\n\
+        p++;\n\
+        varf = coada[p];\n\
+    }\n\
+    cout << 'Parcurgere in latime de la nodul: ' << coada[1] << endl;\n\
+    for( i = 1; i <= ultim; i++ ) {\n\
+        cout << coada[i] << ' ';\n\
+    }";
+
+    cout << endl << endl << "executie program: " << endl;
+
+    program_latime();
 
     getch();
     getline(cin, buffer);
 }
 
-
 /*===========================*/
-void parcurgere_2_inaltime() {
+void program_latime() {
+    int n, i, j, a[10][10], varf;
+    cout<<"nr varfuri: "; cin>>n;
+
+    cout << "citire matrice: " << endl;
+    for(i = 1; i <= n; i++) {
+        for(j = 1; j <= n; j++) {
+            cin >> a[i][j];
+        }
+        cout << endl;
+    }
+
+    if(verifica_matr_adiacenta(a, n) == 1){
+        cout << "varf de la care parcurgem: "; cin >> varf;
+        parcurgere_pe_latime(a, n, varf);
+    } else cout << "nu este matrice de adiacenta";
+}
+
+/*===============================================*/
+void parcurgere_2_adancime() {
     string buffer;
     getline(cin, buffer); // curatare buffer de intrare - tasttura. Avem ceva acolo pt ca suntem bucla meniului principal
     //afiseaza ceva
     system("cls");
 
 
-    cout << "In inaltime - program + executie" << endl;
+    cout << "In adancime" << endl;
+
+    cout << "program:\n\
+    int viz[10];\n\
+    int i, j;\n\
+    int stiva[20];\n\
+    int gasit;\n\
+    int coada[30];\n\
+    int k;\n\
+    int p;\n\
+    viz[0] = 9;\n\
+    for(i = 1; i <= n; i++) {\n\
+        viz[i] = 0;\n\
+    }\n\
+    k = 1;\n\
+    viz[varf] = 1;\n\
+    coada[k] = varf;\n\
+    p = 1;\n\
+    stiva[p] = varf;\n\
+    while( p > 0 ) {\n\
+        gasit = 0;\n\
+        for(j = 1; j <= n && gasit == 0; j++) {\n\
+            if( a[varf][j] == 1 && viz[j] == 0 ) {\n\
+                gasit = 1;\n\
+                varf = j;\n\
+            }\n\
+        }\n\
+        if( gasit == 1 ) {\n\
+            k = k + 1;\n\
+            coada[k] = varf;\n\
+            viz[varf] = 1;\n\
+            p++;\n\
+            stiva[p] = varf;\n\
+        } else {\n\
+            p--;\n\
+        }\n\
+    }\n\
+    cout << 'Parcurgere pe adancime de la nodul: ' << coada[1] << endl;\n\
+    cout << 'Index ultim element din coada: ' << k << endl;\n\
+    for( i = 1; i <= k; i++ ) {\n\
+        cout << coada[i] << ' ';\n\
+    }\n\
+    cout << endl;";
+
+    cout << endl << endl << "executie program: " << endl;
+    program_adancime();
 
     getch();
     getline(cin, buffer);
+}
+/*===========================*/
+
+void program_adancime() {
+    int n, i, j, a[10][10], varf;
+    cout<<"nr varfuri: "; cin>>n;
+
+    cout << "citire matrice: " << endl;
+    for(i = 1; i <= n; i++) {
+        for(j = 1; j <= n; j++) {
+            cin >> a[i][j];
+        }
+        cout << endl;
+    }
+
+    if(verifica_matr_adiacenta(a, n) == 1){
+        cout << "varf de la care parcurgem: "; cin >> varf;
+        parcurgere_pe_adancime(a, n, varf);
+    } else cout << "nu este matrice de adiacenta";
 }
 
 /*=====================================================================
@@ -845,7 +1494,7 @@ void conexitate_1_def() {
 }
 
 
-/*===========================*/
+/*===============================================*/
 void conexitate_2_verif_graf_conex() {
     string buffer;
     getline(cin, buffer); // curatare buffer de intrare - tasttura. Avem ceva acolo pt ca suntem bucla meniului principal
@@ -853,10 +1502,65 @@ void conexitate_2_verif_graf_conex() {
     system("cls");
 
 
-    cout << "Verificare graf conex - program + executie" << endl;
+    cout << "Verificare graf conex" << endl;
+
+    cout << "program:\n\
+    for(i = 1; i <= n; i++) {\n\
+        viz[i] = 0;\n\
+    }\n\
+    k = 1;\n\
+    viz[varf] = 1;\n\
+    coada[k] = varf;\n\
+    p = 1;\n\
+    while( p <= ultim ) {\n\
+        for(j = 1; j <= n; j++) {\n\
+            if( a[varf][j] == 1 && viz[j] == 0 ) {\n\
+                k = k + 1;\n\
+                coada[k] = j;\n\
+                viz[j] = 1;\n\
+                ultim++;\n\
+            }\n\
+        }\n\
+        p++;\n\
+        varf = coada[p];\n\
+    }\n\
+    cout << 'Parcurgere in latime de la nodul: ' << coada[1] << endl;\n\
+    for( i = 1; i <= ultim; i++ ) {\n\
+        cout << coada[i] << ' ';\n\
+    if( n != ultim ) {\n\
+        cout << 'GRAF-ul NU este conex!' << endl;\n\
+    } else\n\
+        cout << 'GRAF-ul este conex' << endl;\n\
+    }";
+
+    cout << endl << endl << "executie program: " << endl;
+
+    graf_conex_program();
 
     getch();
     getline(cin, buffer);
+}
+
+/*===========================*/
+void graf_conex_program() {
+    int n, i, j, a[10][10], varf;
+    cout<<"nr varfuri: "; cin>>n;
+
+    cout << "citire matrice: " << endl;
+    for(i = 1; i <= n; i++) {
+        for(j = 1; j <= n; j++) {
+            cin >> a[i][j];
+        }
+        cout << endl;
+    }
+
+    if(verifica_matr_adiacenta(a, n) == 1){
+        //cout << "varf de la care parcurgem: "; cin >> varf;
+        varf = 1;
+        if(parcurgere_pe_latime_si_conexitate(a, n, varf) != n){
+            cout << "GRAFUL NU este conex!" << endl;
+        } else cout << "GRAFUL este conex" << endl;
+    } else cout << "nu este matrice de adiacenta";
 }
 
 /*=====================================================================
@@ -926,7 +1630,7 @@ void hamitonian_1_teorie() {
 }
 
 
-/*===========================*/
+/*===============================================*/
 void hamiltonian_2_verificare() {
     string buffer;
     getline(cin, buffer); // curatare buffer de intrare - tasttura. Avem ceva acolo pt ca suntem bucla meniului principal
@@ -934,10 +1638,71 @@ void hamiltonian_2_verificare() {
     system("cls");
 
 
-    cout << "Verificare - program + executie" << endl;
+    cout << "Verificare graf Hamiltonian" << endl;
+
+    cout << endl << "program:\n\
+    for(i = 1; i <= n; i++){\n\
+        grade_vf[i] = 0;\n\
+    }\n\
+    for(i = 1; i <= n; i++){\n\
+        for(j = 1; j <= n; j++) {\n\
+            if(a[i][j] == 1){\n\
+                grade_vf[i]++;\n\
+            }\n\
+        }\n\
+    }\n\
+    if(n >= 3) {\n\
+        for(i = 1; i <= n && ok == 1; i++) {\n\
+            if(grade_vf[i] <= n/2) ok = 0;\n\
+        }\n\
+        if(ok == 1) cout << 'GRAF HAMILTONIAN';\n\
+        else cout << 'Graful NU este hamiltonian';\n\
+    } else cout << 'Graful NU este hamiltonian';";
+
+    cout << endl << endl << "executie program: " << endl;
+    program_hamiltonian();
 
     getch();
     getline(cin, buffer);
+}
+/*===========================*/
+void program_hamiltonian() {
+    int a[10][10], n, i, j, grade_vf[10], ok = 1;
+
+    cout<<"nr varfuri: "; cin >> n;
+
+    cout << "citire matrice: " << endl;
+    for(i = 1; i <= n; i++) {
+        for(j = 1; j <= n; j++) {
+            cin >> a[i][j];
+        }
+        cout << endl;
+    }
+
+    if(verifica_matr_adiacenta(a, n) == 1){
+        for(i = 1; i <= n; i++){
+            grade_vf[i] = 0;
+        }
+
+        for(i = 1; i <= n; i++){
+            for(j = 1; j <= n; j++) {
+                if(a[i][j] == 1){
+                    grade_vf[i]++;
+                }
+            }
+        }
+
+        if(n >= 3) {
+            for(i = 1; i <= n && ok == 1; i++) {
+                if(grade_vf[i] >= n/2) ok = 1;
+                else ok = 0;
+            }
+
+            if(ok == 1) cout << "GRAF HAMILTONIAN";
+            else cout << "Graful NU este hamiltonian";
+        } else cout << "Graful NU este hamiltonian";
+
+    } else cout << "nu este matrice de adiacenta";
 }
 
 /*=====================================================================
@@ -1007,7 +1772,7 @@ void eulerian_1_teorie() {
 }
 
 
-/*===========================*/
+/*===============================================*/
 void eulerian_2_verificare() {
     string buffer;
     getline(cin, buffer); // curatare buffer de intrare - tasttura. Avem ceva acolo pt ca suntem bucla meniului principal
@@ -1015,12 +1780,89 @@ void eulerian_2_verificare() {
     system("cls");
 
 
-    cout << "Verificare - program + executie" << endl;
+    cout << "Verificare garf eulerian" << endl;
+
+    cout << endl << "program: \n\
+    for(i = 1; i <= n; i++){\n\
+        grade_vf[i] = 0;\n\
+    }\n\
+    for(i = 1; i <= n; i++) {\n\
+        for(j = 1; j <= n; j++) {\nb\
+            if(a[i][j] == 1){\n\
+                grade_vf[i]++;\n\
+            }\n\
+        }\n\
+    }\n\
+    for(i = 1; i <= n && ok == 1; i++) {\n\
+        if(grade_vf[i] % 2 == 0)\n\
+            ok = 1;\n\
+        else\n\
+            ok = 0;\n\
+    }\n\
+    if(ok == 1)\n\
+        cout << 'GRAF EULERAIN';\n\
+    else\n\
+        cout << 'Graful NU este EULERAIN'";
+
+    cout << endl << endl << "executie program: " << endl;
+    program_eulerian();
 
     getch();
     getline(cin, buffer);
 }
 
+/*===========================*/
+void program_eulerian() {
+    int a[10][10], n, i, j, grade_vf[10], ok = 1, varf;
+
+    cout<<"nr varfuri: "; cin >> n;
+
+    cout << "citire matrice: " << endl;
+    for(i = 1; i <= n; i++) {
+        for(j = 1; j <= n; j++) {
+            cin >> a[i][j];
+        }
+        cout << endl;
+    }
+
+    if(verifica_matr_adiacenta(a, n) == 1) {
+        //cout << "IF1";
+        //cout << n << endl;
+        if(parcurgere_pe_latime_si_conexitate( a, n, 1) == n) {
+            //cout << "IF2";
+
+            for(i = 1; i <= n; i++){
+                grade_vf[i] = 0;
+            }
+
+            for(i = 1; i <= n; i++) {
+                for(j = 1; j <= n; j++) {
+                    if(a[i][j] == 1){
+                        grade_vf[i]++;
+                    }
+                }
+            }
+
+            for(i = 1; i <= n && ok == 1; i++) {
+                if(grade_vf[i] % 2 == 0)
+                    ok = 1;
+                else
+                    ok = 0;
+            }
+
+            if(ok == 1)
+                cout << "GRAF EULERAIN";
+            else
+                cout << "Graful NU este EULERAIN";
+
+        } else
+            cout << "Graful NU este EULERIAN";
+
+    } else {
+        //cout << "AICI" << endl;
+        cout << "nu este matrice de adiacenta";
+    }
+}
 /*=====================================================================
   opt 8 - meniu PRINCIPAL - Aplicatii
 ======================================================================*/
@@ -1075,7 +1917,7 @@ void mp_8_aplicatii() {
     } while(o != 4);
 }
 
-/*===========================*/
+/*===============================================*/
 void apl_1() {
     string buffer;
     getline(cin, buffer); // curatare buffer de intrare - tasttura. Avem ceva acolo pt ca suntem bucla meniului principal
@@ -1084,13 +1926,100 @@ void apl_1() {
 
 
     cout << "Problema 1" << endl;
+    cout << "\
+    Se defineste o muchie a unui graf neorientat ca o inregistrare cu trei campuri: cele doua varfuri\n\
+    extremitati si un cost asociat muchiei (un numar intreg). Definim un graf neorientat ca un vector de\n\
+    muchii. Fiind dat vectorul de muchii al unui graf neorientat G=(X, U) cu m muchii si n varfuri, sa se\n\
+    afiseze muchia (muchiile) de cost minim." << endl << endl;
+
+    cout << "program:\n\
+    struct muchii_graf {\n\
+        int vf1, vf2, cost;\n\
+    };\n\
+    muchii_graf muchie;\n\
+    int n, m, i, v_vf1[10], v_vf2[10], v_cost[10], mini;\n\
+    cout << 'nuamr varfuri: '; cin >> n;\n\
+    do{\n\
+        cout << 'numar muchii: ';\n\
+        cin >> m;\n\
+    } while (m > n*(n-1)/2);\n\
+    for(i = 0; i < m; i++){\n\
+        cout << 'muchie cu vf1, vf2 si cost: ' << endl;\n\
+        do{\n\
+            cout << 'vf1: '; cin >> muchie.vf1;\n\
+            cout << 'vf2: '; cin >> muchie.vf2;\n\
+            if(muchie.vf1 > n || muchie.vf2 > n || muchie.vf1 == muchie.vf2 || muchie.vf1 > muchie.vf2) cout << 'nu pot fi varfuri; dati alte valoari: ' << endl;\n\
+        } while(muchie.vf1 > n || muchie.vf2 > n || muchie.vf1 == muchie.vf2 || muchie.vf1 >muchie.vf2);\n\
+        v_vf1[i] = muchie.vf1;\n\
+        v_vf2[i] = muchie.vf2;\n\
+        cin >> muchie.cost;`\n\
+        v_cost[i] = muchie.cost;\n\
+    }\n\
+    mini = v_cost[0];\n\
+    for(i = 0; i < m; i++) {\n\
+        if(mini > v_cost[i]) {\n\
+            mini = v_cost[i];\n\
+        }\n\
+    }\n\
+    for(i = 0; i < m; i++) {\n\
+        if(v_cost[i] == mini) {\n\
+            cout << 'muchie cu cost minim:   ' << '(' << v_vf1[i] << ', ' << v_vf2[i] << ')' << endl;\n\
+        }\n\
+    }";
+
+    cout << endl << endl << "executie program: " << endl;
+    program_1();
 
     getch();
     getline(cin, buffer);
 }
 
-
 /*===========================*/
+void program_1() {
+    struct muchii_graf {
+        int vf1, vf2, cost;
+    };
+    muchii_graf muchie;
+
+    int n, m, i, v_vf1[10], v_vf2[10], v_cost[10], mini;
+
+    cout << "nuamr varfuri: "; cin >> n;
+
+    do{
+        cout << "numar muchii: ";
+        cin >> m;
+    } while (m > n*(n-1)/2);
+
+    for(i = 0; i < m; i++){
+        cout << "muchie cu vf1, vf2 si cost: " << endl;
+        do{
+            cout << "vf1: "; cin >> muchie.vf1;
+            cout << "vf2: "; cin >> muchie.vf2;
+            if(muchie.vf1 > n || muchie.vf2 > n || muchie.vf1 == muchie.vf2 || muchie.vf1 > muchie.vf2) cout << "nu pot fi varfuri; dati alte valoari: " << endl;
+        } while(muchie.vf1 > n || muchie.vf2 > n || muchie.vf1 == muchie.vf2 || muchie.vf1 >muchie.vf2);
+
+        v_vf1[i] = muchie.vf1;
+        v_vf2[i] = muchie.vf2;
+
+        cin >> muchie.cost;
+        v_cost[i] = muchie.cost;
+    }
+
+    mini = v_cost[0];
+    for(i = 0; i < m; i++) {
+        if(mini > v_cost[i]) {
+            mini = v_cost[i];
+        }
+    }
+
+    for(i = 0; i < m; i++) {
+        if(v_cost[i] == mini) {
+            cout << "muchie cu cost minim:   " << "(" << v_vf1[i] << ", " << v_vf2[i] << ")" << endl;
+        }
+    }
+}
+
+/*===============================================*/
 void apl_2() {
     string buffer;
     getline(cin, buffer); // curatare buffer de intrare - tasttura. Avem ceva acolo pt ca suntem bucla meniului principal
@@ -1099,12 +2028,95 @@ void apl_2() {
 
 
     cout << "Problema 2" << endl;
+    cout << "\
+    Pentru un grup format din n persoane, se cunosc relatiile de prietenie. Se defineste o relatie de\n\
+    prietenie sub forma 'x este prieten cu y'. Sa se afiseze persoana /persoanele din grup care are/au\n\
+    cei mai multi prieteni.";
+
+    cout << endl << " program:\n\
+        int a[11][11], d[11];\n\
+        int n, i, j, maxi;\n\
+        char rasp;\n\
+        cout << 'nr persoane grup: '; cin >> n;\n\
+        for(i = 1; i <= n; i++) {\n\
+            for(j = i + 1; j <= n; j++) {\n\
+                cout << i << ' este prieten cu ' << j << '? d/n ';\n\
+                cin >> rasp;\n\
+                if( rasp == 'd' || rasp == 'D') {\n\
+                    a[i][j] = 1;\n\
+                    a[j][i] = 1;\n\
+                } else {\n\
+                    if(rasp != 'n' && rasp != 'N') {\n\
+                        cout << endl <<'raspunsul nu e valid';\n\
+                    }\n\
+                }\n\
+            }\n\
+        }\n\
+        for(i = 1; i <= n; i++) {\n\
+            for(j = 1; j <= n; j++) {\n\
+                d[i] = d[i] + a[i][j];\n\
+            }\n\
+        }\n\
+        maxi = d[1];\n\
+        for(i = 2; i <= n; i++) {\n\
+            if(maxi < d[i]) {\n\
+                maxi = d[i];\n\
+            }\n\
+        }\n\
+        for(i = 1; i <= n; i++) {\n\
+            if( d[i] == maxi ) cout << endl <<  'cei mai multi prieteni ii are ----> ' <<  i << ' ';\n\
+    }";
+
+    cout << endl << endl << "executie program: " << endl;
+    program_2();
 
     getch();
     getline(cin, buffer);
 }
 
 /*===========================*/
+void program_2() {
+    int a[11][11], d[11];
+    int n, i, j, maxi;
+    char rasp;
+
+    cout << "nr persoane grup: "; cin >> n;
+
+    // fromez matricea de adiacenta
+    for(i = 1; i <= n; i++) {
+        for(j = i + 1; j <= n; j++) {
+            cout << i << " este prieten cu " << j << "? d/n ";
+            cin >> rasp;
+            if( rasp == 'd' || rasp == 'D') {
+                a[i][j] = 1;
+                a[j][i] = 1;
+            } else {
+                if(rasp != 'n' && rasp != 'N') {
+                    cout << endl << "raspunsul nu e valid" << endl;
+                }
+            }
+        }
+    }
+
+    // determinarea gradului varfuri
+    for(i = 1; i <= n; i++) {
+        for(j = 1; j <= n; j++) {
+            d[i] = d[i] + a[i][j];
+        }
+    }
+    maxi = d[1];
+
+    for(i = 2; i <= n; i++) {
+        if(maxi < d[i]) {
+            maxi = d[i];
+        }
+    }
+    for(i = 1; i <= n; i++) {
+        if( d[i] == maxi ) cout << endl <<  "cei mai multi prieteni ii are ----> " <<  i << " ";
+    }
+}
+
+/*===============================================*/
 void apl_3() {
     string buffer;
     getline(cin, buffer); // curatare buffer de intrare - tasttura. Avem ceva acolo pt ca suntem bucla meniului principal
@@ -1113,9 +2125,82 @@ void apl_3() {
 
 
     cout << "Problema 3" << endl;
+    cout << "\
+    Se citeste de la tastatura matricea de adiacenta a unui graf neorientat cu n varfuri.\n\
+    Sa se scrie muchiile grafului (pe fiecare rand se vor scrie extremitatile unei muchii\n\
+    separate prin spatiu).";
+
+    cout << endl << "program:\n\
+    int a[10][10];\n\
+    int v[45], i, j, n, k = 0;\n\
+    cout << 'n: '; cin >> n;\n\
+    cout << ' introduceti elemente matrice adiacenta luate pe linie: ' << endl;\n\
+    for(i = 1; i <= n; i++) {\n\
+        for(j = 1; j <= n; j++) {\n\
+            cin >> a[i][j];\n\
+        }\n\
+        cout << endl;\n\
+    }\n\
+    if(verifica_matr_adiacenta(a, n) == 1) {\n\
+        for(i = 1; i <= n; i++) {\n\
+            for(j = 1; j <= n; j++) {\n\
+                if(a[i][j] != 0) {\n\
+                    if(verifica_duplicat(v, k, i*10 + j)) {\n\
+                        cout << 'Muchia: ' << i << ' ' << j << ' deja adaugata' << endl;\n\
+                    } else {\n\
+                        v[k] = i * 10 + j;\n\
+                        cout << i << " " << j << endl;\n\
+                    }\n\
+                    k++;\n\
+                }\n\
+            }\n\
+        }\n\
+    } else cout << 'matricea nu poate fi matrice de adiacenta';";
+
+
+    cout << endl << endl << "executie program: " << endl;
+    program_3();
 
     getch();
     getline(cin, buffer);
+}
+
+/*===========================*/
+void program_3() {
+    int a[10][10];
+    int v[45], i, j, n, k = 0;
+
+
+    cout << "n: "; cin >> n;
+    cout << " introduceti elemente matrice adiacenta luate pe linie: " << endl;
+
+    for(i = 1; i <= n; i++) {
+        for(j = 1; j <= n; j++) {
+            cin >> a[i][j];
+        }
+        cout << endl;
+    }
+
+    if(verifica_matr_adiacenta(a, n) == 1) {
+        for(i = 1; i <= n; i++) {
+            for(j = 1; j <= n; j++) {
+                //cout << a[i][j] << " ";
+
+                if(a[i][j] != 0) {
+                    //cout << " ++++++++ " << i << " " << j << endl;
+
+                    if(verifica_duplicat(v, k, i*10 + j)) {
+                        //cout << "Muchia: " << i << " " << j << " deja adaugata" << endl;
+                    } else {
+                        v[k] = i * 10 + j;
+                        cout << i << " " << j << endl;
+                    }
+                    k++;
+                }
+            }
+            //cout << endl;
+        }
+    } else cout << "matricea nu poate fi matrice de adiacenta";
 }
 
 /*===============================================================
@@ -1158,9 +2243,9 @@ void mp_9_test() {
     } while(o != 2);
 }
 
-/*===========================
+/*=====================================
     FUNCTIE PENTRU TEST GRAFURI
-===========================*/
+=======================================*/
 void test() {
     string buffer;
     string golire_buf;
@@ -1205,6 +2290,8 @@ void test() {
 
     punctaj += intrebare_cu_r_scurt(intrebare_10, "conex");
     cout << endl << "punctaj: " << punctaj << endl;
+
+    cout << endl << endl << "Punctaj final: " << punctaj << " din 100";
 
     getch();
     getline(cin, buffer);
