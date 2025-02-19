@@ -18,10 +18,14 @@ Pentru mentananta, este mai bine ca un program cu multe linii de cod sa fie spar
 [fisierul sursa](proiect_vector_stiva_si_coada.cpp)
 
 
-## Formular test la biologie in terminal
-
 ## Proiect grafuri neorientate
+[Cuprins](#cuprins)
+
+[fisierul sursa](proiect_grafuri_neorientate.cpp)
+
 
 ## Proiect grafuri orientate
+[Cuprins](#cuprins)
 
-##
+[fisierul sursa](proiect_grafuri_orientate.cpp)
+
