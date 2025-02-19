@@ -47,7 +47,7 @@ Proiectului i se pot face inbunatatiri. Listele inlantuite se implementeaza cu s
 
 [fisierul sursa](proiect_grafuri_neorientate.cpp)
 
-Aplicatia ruleaza in consola si este interactiva. Se prezinta aspecte
+Aplicatia ruleaza in consola si este interactiva. 
 
 
 Proiectul descrie notiuni generale despre grafurile neorientate. Este realizat in asa fel incat sa prezinte intr-o maniera interactiva, in linia de comanda, definitii si aplicatii legate de grafuri.
@@ -108,4 +108,20 @@ Exemplu de intrebari:
 [Cuprins](#cuprins)
 
 [fisierul sursa](proiect_grafuri_orientate.cpp)
+
+Aplicatia ruleaza in consola si este interactiva. 
+Proiectul descrie notiuni generale despre grafurile orientate. Prezinta definitii si aplicatii legate de grafurile orientate.
+
+Meniul principal al aplicatiei este:
+
+        1. Definitii
+        2. Gradul unui varf
+        3. Metode de reprezentare
+        4. Conexitate
+        5. Tare conexitate
+        6. Aplicatii
+        7. Test
+        8. Iesire
+
+Programul acopera aspectele mentionate mai sus oferind definitii pt aceste nostiuni, precum si exercitii.
 
