@@ -4,6 +4,7 @@
 
 1. [Stiva si Coada implementate cu array](#stiva-si-coada)
 1. [Grafuri neorientate](#Grafuri-neorientate)
+1. [Grafuri orientate](#Grafuri-orientate)
 
 In acest director se regasesc principalele proiectele facute in liceu la materia informatica. Acestea sunt realizate in limbajul c/c++.
 
