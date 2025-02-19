@@ -1,5 +1,7 @@
-# Formular test la biologie in terminal
+[Pagina principala - proiecte](../)
 
-# Proiect grafuri neorientate
+## Formular test la biologie in terminal
 
-# Proiect grafuri orientate
+## Proiect grafuri neorientate
+
+## Proiect grafuri orientate
