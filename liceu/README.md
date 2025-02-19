@@ -13,6 +13,7 @@ Pentru mentananta, este mai bine ca un program cu multe linii de cod sa fie spar
 # Proiecte
 
 ## Stiva si coada
+[Cuprins](#cuprins)
 
 ## Formular test la biologie in terminal
 
