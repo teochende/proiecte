@@ -18,11 +18,36 @@ Pentru mentananta, este mai bine ca un program cu multe linii de cod sa fie spar
 
 [fisierul sursa](proiect_vector_stiva_si_coada.cpp)
 
+Proiectul implementeaza ideile de lista, coada, stiva intr-o maniera simplista, folosind un array alocat static pt a exeplifica operatii specificie acestor structuri de date.
+Pentru fiecare, lista, coada si stiva sunt prezentate programe pt adaugare, stergere si afisare de elemente.
+
+        Meniu principal:
+      
+            1. Lista
+      
+            2. Stiva
+      
+            3. Coada
+      
+            4. Iesire
+
+Lista - implementata sub forma de array
+      - se pot adauga/sterge elemente de pe prima, ultima, sau o pozitie oarecare
+
+Stiva - implementata sub forma de array
+      - ultumul element adaugat este si primul care va fi eliminat
+      
+Coada - implementata sub forma de array
+      - primul element adaugat in coada va fi si primul eliminat
+
+Proiectului i se pot face inbunatatiri. Listele inlantuite se implementeaza cu strcuturi si pointeri. Exemplul acesta nu acopera acest tip de implementare.
 
 ## Grafuri neorientate
 [Cuprins](#cuprins)
 
 [fisierul sursa](proiect_grafuri_neorientate.cpp)
+
+Aplicatia ruleaza in consola si este interactiva. Se prezinta aspecte
 
 
 Proiectul descrie notiuni generale despre grafurile neorientate. Este realizat in asa fel incat sa prezinte intr-o maniera interactiva, in linia de comanda, definitii si aplicatii legate de grafuri.
