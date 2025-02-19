@@ -24,7 +24,21 @@ Pentru mentananta, este mai bine ca un program cu multe linii de cod sa fie spar
 
 [fisierul sursa](proiect_grafuri_neorientate.cpp)
 
-Proiectul descrie notiuni generale despre grafurile neorientate. Este realizat in asa fel incat sa prezinte intr-o maniera interactiva definitii si aplicatii legate de grafuri.
+
+Proiectul descrie notiuni generale despre grafurile neorientate. Este realizat in asa fel incat sa prezinte intr-o maniera interactiva, in linia de comanda, definitii si aplicatii legate de grafuri.
+
+Meniul principal al aplicatiei este:
+
+      1. Definitii
+      2. Gradul unui varf
+      3. Metode de reprezentare
+      4. Parcurgere
+      5. Conexitate
+      6. Graf Hamiltonian
+      7. Graf Eulerian
+      8. Aplicatii
+      9. Test
+      10. Iesire
 
 Sunt acoperite atat teoretic cat si practic:
 
@@ -40,6 +54,30 @@ Sunt acoperite atat teoretic cat si practic:
 3. Notiuni de conexitate
 
 Proiectul, de asemenea, contine si o simulare de test grila si cu completare de raspuns cu intrebari despre grafuri neorientate.
+
+Exemplu de intrebari:
+
+    Test de verificare a cunostintelor
+    Alegeti raspunsul corect la urmatoarele intrebari, introducand cifre:
+    
+    Intrebarea 1. Un graf neorientat poate fi arbore numai daca:
+    1) nu este conex
+    2) nu contine cicluri
+    3) are n muchii, unde n este numarul de varfuri
+    4) contine cicluri
+    
+    Dati raspunsul: 2                                         // s-a selectat raspunsul 2
+    apasati tasta enter pt a trece la intrebarea urmatoare
+    
+    punctaj: 10                                               // a fost corect si s-a primit punctajul
+    
+    Intrebarea 2. Un graf G=(X,U) neorientat este conex daca si numai daca:
+    1) pentru orice pereche (x,y) x != y exista un lant de la x la y, x,y Γé¼ X
+    2) pentru orice pereche (x,y) x !=y exista o muchie u=[x,y], u Γé¼ U
+    3) pentru orice pereche (x,y) x != y exista un drum de la x la y
+    4) nici un raspuns anterior nu este corect
+    
+    Dati raspunsul:
 
 ## Grafuri orientate
 [Cuprins](#cuprins)
