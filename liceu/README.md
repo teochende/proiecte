@@ -5,5 +5,3 @@
 ## Proiect grafuri neorientate
 
 ## Proiect grafuri orientate
-
-test
