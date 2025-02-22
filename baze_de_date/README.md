@@ -5,4 +5,4 @@ Proiectul reprezinta crearea unei baze de date care sa ajute la gestionarea unei
 
 Baza de date gestioneaza un salon cu mai multe sedii, in mai multe locatitati, avand mai multi angajati. Acestia au diferite specializari si ofera servicii diverse pentru mai multi clienti. 
 
-[document salon infrumusteare](salorn_de_infrumusetare.pdf)
+[document - salon infrumusteare](salon_de_infrumusetare.pdf)
