@@ -1,0 +1,6 @@
+Raport actualizat: duminică 26 mai 2024, 23:19:55 +0300
+Directorul: /home/cip/programare/git/teodora/facultate/an1/so/proiect_utilizatori/phome/george
+Contine: 
+0, directoare
+2, fisiere
+Spatiu ocupat pe hard-disk: "12K

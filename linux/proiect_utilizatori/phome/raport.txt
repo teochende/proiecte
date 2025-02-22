@@ -1,0 +1,6 @@
+Raport actualizat la: 
+Directorul: /home/cip/programare/git/teodora/facultate/an1/so/proiect_utilizatori/phome/
+Contine: 
+3, directoare
+0, fisiere
+Spatiu ocupat pe hard-disk: "16K

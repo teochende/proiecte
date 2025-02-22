@@ -1,0 +1,6 @@
+Raport actualizat: duminică 26 mai 2024, 23:22:12 +0300
+Directorul: /home/cip/programare/git/teodora/facultate/an1/so/proiect_utilizatori/phome/teo
+Contine: 
+3, directoare
+4, fisiere
+Spatiu ocupat pe hard-disk: "24K
